@@ -3,9 +3,12 @@ package com.hkoikoi.toeicMaster.domain.member.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hkoikoi.toeicMaster.domain.member.dto.MemberResponse;
 import com.hkoikoi.toeicMaster.domain.member.entity.Member;
 import com.hkoikoi.toeicMaster.domain.member.enums.OAuth2Provider;
 import com.hkoikoi.toeicMaster.domain.member.repository.MemberRepository;
+import com.hkoikoi.toeicMaster.global.exception.BusinessException;
+import com.hkoikoi.toeicMaster.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +18,14 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
-	// TODO: 내 정보 조회 로직 작성
+	@Transactional(readOnly = true)
+	public MemberResponse getMyInfo(Long memberId) {
+
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
+
+		return MemberResponse.from(member);
+	}
 
 	@Transactional
 	public Member getOrCreateMember(String email, String nickname, OAuth2Provider provider, String providerId) {
