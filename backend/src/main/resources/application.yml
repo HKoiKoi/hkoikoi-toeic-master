@@ -1,0 +1,78 @@
+server:
+  port: 8080
+  forward-headers-strategy: native
+
+spring:
+  application:
+    name: TOEIC-Master
+
+  profiles:
+    active: dev
+
+  # ----------------------------------------
+  # Database (App - CRUD Only)
+  # ----------------------------------------
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT}/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${MYSQL_APP_USER}
+    password: ${MYSQL_APP_PASSWORD}
+    hikari:
+      pool-name: ToeicMasterHikariPool
+      maximum-pool-size: 10
+
+  # ----------------------------------------
+  # Database (Migration - DDL Only)
+  # ----------------------------------------
+  flyway:
+    enabled: true
+    user: ${MYSQL_FLYWAY_USER}
+    password: ${MYSQL_FLYWAY_PASSWORD}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # ----------------------------------------
+  # Redis (Cache & Session)
+  # ----------------------------------------
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      timeout: 6000ms
+
+  # ----------------------------------------
+  # JPA / Hibernate
+  # ----------------------------------------
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+
+  # ----------------------------------------
+  # OAuth2
+  # ----------------------------------------
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - profile
+              - email
+
+# ----------------------------------------
+# JWT
+# ----------------------------------------
+jwt:
+  issuer: ${JWT_ISSUER}
+  secret: ${JWT_SECRET}
+  access-token-validity-in-seconds: ${JWT_ACCESS_TOKEN_VALIDITY_IN_SECONDS}
+  refresh-token-validity-in-seconds: ${JWT_REFRESH_TOKEN_VALIDITY_IN_SECONDS}
+

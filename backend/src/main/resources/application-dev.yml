@@ -1,0 +1,28 @@
+spring:
+  # ----------------------------------------
+  # JPA / Hibernate
+  # ----------------------------------------
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+# ----------------------------------------
+# OAuth2
+# ----------------------------------------
+app:
+  oauth2:
+    cookie-secure: false
+    frontend-redirect-url: "http://localhost:3000/oauth2/redirect"
+
+# ----------------------------------------
+# Logging
+# ----------------------------------------
+logging:
+  level:
+    root: info
+    com.hkoikoi.toeic: debug
+    org.springframework.security: debug
+    org.flywaydb: info
