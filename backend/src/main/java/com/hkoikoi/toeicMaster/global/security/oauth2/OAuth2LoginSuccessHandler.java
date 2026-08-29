@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.hkoikoi.toeicMaster.global.security.SecurityConstants;
 import com.hkoikoi.toeicMaster.global.security.jwt.JwtProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,7 +51,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 		// TODO: 발급된 Refresh Token을 Redis에 저장하여 추후 검증 및 로그아웃에 사용하는 로직 추가
 
 		String targetUrl = UriComponentsBuilder.fromUriString(frontendRedirectUrl)
-			.queryParam("accessToken", accessToken)
+			.queryParam(SecurityConstants.QUERY_PARAM_ACCESS_TOKEN, accessToken)
 			.build().toUriString();
 
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);

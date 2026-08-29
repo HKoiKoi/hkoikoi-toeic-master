@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import com.hkoikoi.toeicMaster.global.security.SecurityConstants;
+
 public record CustomOAuth2User(
 
 	Long memberId,
@@ -25,7 +27,7 @@ public record CustomOAuth2User(
 	@NonNull
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
+		return Collections.singletonList(new SimpleGrantedAuthority(SecurityConstants.ROLE_PREFIX + role));
 	}
 
 	@NonNull

@@ -9,6 +9,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.hkoikoi.toeicMaster.global.security.SecurityConstants;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +32,7 @@ public class OAuth2LoginFailureHandler extends SimpleUrlAuthenticationFailureHan
 		log.error("OAuth2 로그인 실패: {}", exception.getMessage());
 
 		String targetUrl = UriComponentsBuilder.fromUriString(frontendLoginUrl)
-			.queryParam("error", "login_failed")
+			.queryParam(SecurityConstants.QUERY_PARAM_ERROR, SecurityConstants.ERROR_LOGIN_FAILED)
 			.build().toUriString();
 
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);

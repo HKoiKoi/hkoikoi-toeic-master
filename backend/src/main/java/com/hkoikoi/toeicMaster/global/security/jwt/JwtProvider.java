@@ -8,6 +8,8 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.hkoikoi.toeicMaster.global.security.SecurityConstants;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -19,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class JwtProvider {
-
-	private static final String ROLE_CLAIM = "role";
 
 	private final String issuer;
 	private final SecretKey secretKey;
@@ -90,7 +90,7 @@ public class JwtProvider {
 	 * 토큰에서 권한 추출
 	 */
 	public String getRoleFromToken(String token) {
-		return parseClaims(token).get(ROLE_CLAIM, String.class);
+		return parseClaims(token).get(SecurityConstants.ROLE_CLAIM, String.class);
 	}
 
 	private String createToken(String subject, String role, long validityInMilliseconds) {
@@ -101,7 +101,7 @@ public class JwtProvider {
 		return Jwts.builder()
 			.issuer(issuer)
 			.subject(subject)
-			.claim(ROLE_CLAIM, role)
+			.claim(SecurityConstants.ROLE_CLAIM, role)
 			.issuedAt(now)
 			.expiration(validity)
 			.signWith(secretKey)
