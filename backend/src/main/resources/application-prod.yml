@@ -16,6 +16,7 @@ app:
   oauth2:
     cookie-secure: true
     frontend-redirect-url: "https://toeic.hkoikoi.dev/oauth2/redirect"
+    frontend-login-url: "https://toeic.hkoikoi.dev/login"
 
 # ----------------------------------------
 # Logging
