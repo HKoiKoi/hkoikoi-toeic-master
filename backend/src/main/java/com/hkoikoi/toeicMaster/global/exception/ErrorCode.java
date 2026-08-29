@@ -24,6 +24,12 @@ public enum ErrorCode {
 	// ----------------------------------------
 	NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_001", "존재하지 않는 회원입니다."),
 	CONFLICT_MEMBER_NICKNAME(HttpStatus.CONFLICT, "MEMBER_002", "이미 사용 중인 닉네임입니다."),
+
+	// ----------------------------------------
+	// 인증 (Auth) 에러
+	// ----------------------------------------
+	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_001", "인증이 필요합니다."),
+	FORBIDDEN(HttpStatus.FORBIDDEN, "AUTH_002", "접근 권한이 없습니다."),
 	;
 
 	HttpStatus status;
