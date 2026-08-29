@@ -1,6 +1,7 @@
-import { Menu, Pencil } from "lucide-react";
 import { useState } from "react";
 import logo from "@/assets/logo.png";
+import { Menu, Pencil } from "lucide-react";
+import { ProviderBadge, RoleBadge } from "@/components/common/Badges";
 
 export const Header = () => {
   // TODO: Zustand, React Query를 통해 전역 상태로 관리할 유저 정보
@@ -54,9 +55,7 @@ export const Header = () => {
 
       {/* OAuth2 공급자 */}
       <div>
-        <span className="badge badge-outline badge-sm text-gray-500">
-          {mockMember.provider}
-        </span>
+        <ProviderBadge provider={mockMember.provider} />
       </div>
 
       {/* 이메일 */}
@@ -64,7 +63,7 @@ export const Header = () => {
 
       {/* 권한 배지 */}
       <div>
-        <span className="badge badge-primary font-bold">{mockMember.role}</span>
+        <RoleBadge role={mockMember.role} />
       </div>
     </li>
   );
