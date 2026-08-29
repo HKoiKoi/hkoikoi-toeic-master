@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.hkoikoi.toeicMaster.global.security.SecurityConstants;
 import com.hkoikoi.toeicMaster.global.security.jwt.JwtProvider;
+import com.hkoikoi.toeicMaster.global.security.jwt.RefreshTokenRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	private final JwtProvider jwtProvider;
+
+	private final RefreshTokenRepository refreshTokenRepository;
 
 	@Value("${app.oauth2.frontend-redirect-url}")
 	private String frontendRedirectUrl;
@@ -48,7 +51,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
 		log.info("OAuth2 로그인 성공. 발급된 Member ID: {}, Role: {}", memberId, role);
 
-		// TODO: 발급된 Refresh Token을 Redis에 저장하여 추후 검증 및 로그아웃에 사용하는 로직 추가
+		refreshTokenRepository.save(memberId, refreshToken);
 
 		String targetUrl = UriComponentsBuilder.fromUriString(frontendRedirectUrl)
 			.queryParam(SecurityConstants.QUERY_PARAM_ACCESS_TOKEN, accessToken)
