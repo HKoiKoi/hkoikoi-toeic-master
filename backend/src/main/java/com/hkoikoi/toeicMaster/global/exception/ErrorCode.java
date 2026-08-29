@@ -23,6 +23,7 @@ public enum ErrorCode {
 	// 사용자 (Member) 에러
 	// ----------------------------------------
 	NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_001", "존재하지 않는 회원입니다."),
+	CONFLICT_MEMBER_NICKNAME(HttpStatus.CONFLICT, "MEMBER_002", "이미 사용 중인 닉네임입니다."),
 	;
 
 	HttpStatus status;

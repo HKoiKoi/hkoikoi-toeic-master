@@ -1,6 +1,7 @@
 package com.hkoikoi.toeicMaster.domain.member.controller;
 
 import static org.mockito.BDDMockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -14,10 +15,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.hkoikoi.toeicMaster.domain.member.dto.MemberNicknameUpdateRequest;
 import com.hkoikoi.toeicMaster.domain.member.dto.MemberResponse;
 import com.hkoikoi.toeicMaster.domain.member.enums.MemberRole;
 import com.hkoikoi.toeicMaster.domain.member.enums.OAuth2Provider;
 import com.hkoikoi.toeicMaster.domain.member.service.MemberService;
+
+import tools.jackson.databind.ObjectMapper;
 
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
@@ -27,6 +31,9 @@ class MemberControllerTest {
 
 	@MockitoBean
 	private MemberService memberService;
+
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Test
 	@WithMockUser
@@ -64,5 +71,30 @@ class MemberControllerTest {
 			.andExpect(jsonPath("$.data.provider").value(provider.toString()))
 			.andExpect(jsonPath("$.data.providerId").value(providerId))
 			.andExpect(jsonPath("$.data.role").value(role.toString()));
+	}
+
+	@Test
+	@WithMockUser
+	@DisplayName(value = "내 닉네임 변경 요청이 성공하면 200 OK를 반환한다.")
+	void updateNickname_should_return200_when_requested() throws Exception {
+
+		// given
+		Long currentMemberId = 1L;
+		String newNickname = "newNick";
+		MemberNicknameUpdateRequest request = new MemberNicknameUpdateRequest(newNickname);
+
+		willDoNothing().given(memberService).updateNickname(currentMemberId, newNickname);
+
+		// when & then
+		mockMvc.perform(patch("/api/v1/members/me/nickname")
+				.with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.result").value(Boolean.TRUE))
+			.andExpect(jsonPath("$.data").doesNotExist());
+
+		verify(memberService).updateNickname(currentMemberId, newNickname);
 	}
 }

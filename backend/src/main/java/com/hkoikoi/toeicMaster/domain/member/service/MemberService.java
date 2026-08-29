@@ -37,7 +37,18 @@ public class MemberService {
 			});
 	}
 
-	// TODO: 내 닉네임 변경 로직 작성
+	@Transactional
+	public void updateNickname(Long memberId, String newNickname) {
+
+		if (memberRepository.existsByNickname(newNickname)) {
+			throw new BusinessException(ErrorCode.CONFLICT_MEMBER_NICKNAME);
+		}
+
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
+
+		member.updateNickname(newNickname);
+	}
 
 	// TODO: [ADMIN] 사용자 닉네임 변경 로직 작성
 
