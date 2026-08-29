@@ -9,8 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.hkoikoi.toeicMaster.global.response.ApiError;
 import com.hkoikoi.toeicMaster.global.response.ApiResponse;
+import com.hkoikoi.toeicMaster.global.response.ErrorResponse;
 import com.hkoikoi.toeicMaster.global.response.FieldErrorDetail;
 
 import jakarta.validation.ConstraintViolationException;
@@ -100,7 +100,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
 
 		log.error("Unhandled Exception: ", ex);
-		
+
 		return buildErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
 	}
 
@@ -117,10 +117,11 @@ public class GlobalExceptionHandler {
 		String customMessage,
 		List<FieldErrorDetail> details
 	) {
-		ApiError apiError = (details == null || details.isEmpty())
-			? ApiError.of(errorCode.getCode(), customMessage)
-			: ApiError.of(errorCode.getCode(), customMessage, details);
+		
+		ErrorResponse errorResponse = (details == null || details.isEmpty())
+			? ErrorResponse.of(errorCode.getCode(), customMessage)
+			: ErrorResponse.of(errorCode.getCode(), customMessage, details);
 
-		return ResponseEntity.status(errorCode.getStatus()).body(ApiResponse.error(apiError));
+		return ResponseEntity.status(errorCode.getStatus()).body(ApiResponse.error(errorResponse));
 	}
 }

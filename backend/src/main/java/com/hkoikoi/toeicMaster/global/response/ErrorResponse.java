@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record ApiError(
+public record ErrorResponse(
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	LocalDateTime timestamp,
@@ -19,11 +19,11 @@ public record ApiError(
 	List<FieldErrorDetail> details
 ) {
 
-	public static ApiError of(String code, String message) {
-		return new ApiError(LocalDateTime.now(), code, message, null);
+	public static ErrorResponse of(String code, String message) {
+		return new ErrorResponse(LocalDateTime.now(), code, message, null);
 	}
 
-	public static ApiError of(String code, String message, List<FieldErrorDetail> details) {
-		return new ApiError(LocalDateTime.now(), code, message, details);
+	public static ErrorResponse of(String code, String message, List<FieldErrorDetail> details) {
+		return new ErrorResponse(LocalDateTime.now(), code, message, details);
 	}
 }

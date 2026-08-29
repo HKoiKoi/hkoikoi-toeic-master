@@ -9,7 +9,7 @@ public record ApiResponse<T>(
 
 	T data,
 
-	ApiError error
+	ErrorResponse error
 ) {
 
 	public static <T> ApiResponse<T> success(T data) {
@@ -20,7 +20,7 @@ public record ApiResponse<T>(
 		return new ApiResponse<>(Boolean.TRUE, null, null);
 	}
 
-	public static <T> ApiResponse<T> error(ApiError error) {
+	public static <T> ApiResponse<T> error(ErrorResponse error) {
 		return new ApiResponse<>(Boolean.FALSE, null, error);
 	}
 }
