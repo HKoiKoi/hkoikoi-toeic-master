@@ -2,12 +2,14 @@ package com.hkoikoi.toeicMaster.domain.member.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hkoikoi.toeicMaster.domain.member.dto.MemberNicknameUpdateRequest;
 import com.hkoikoi.toeicMaster.domain.member.dto.MemberResponse;
+import com.hkoikoi.toeicMaster.domain.member.dto.MemberRoleUpdateRequest;
 import com.hkoikoi.toeicMaster.domain.member.service.MemberService;
 import com.hkoikoi.toeicMaster.global.response.ApiResponse;
 
@@ -45,7 +47,15 @@ public class MemberController {
 		return ApiResponse.success();
 	}
 
-	// TODO: [ADMIN] 사용자 닉네임 변경 API 매핑 - "/api/v1/members/{memberId}/nickname"
+	// TODO: ADMIN 전용 권한 제어 추가 필요
+	@PatchMapping("/{memberId}/role")
+	public ApiResponse<Void> updateRole(
+		@PathVariable Long memberId,
+		@Valid @RequestBody MemberRoleUpdateRequest request
+	) {
 
-	// TODO: [ADMIN] 사용자 권한 변경 API 매핑 - "/api/v1/members/{memberId}/role"
+		memberService.updateRole(memberId, request.role());
+
+		return ApiResponse.success();
+	}
 }

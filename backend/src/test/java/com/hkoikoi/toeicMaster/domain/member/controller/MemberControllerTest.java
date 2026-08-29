@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.hkoikoi.toeicMaster.domain.member.dto.MemberNicknameUpdateRequest;
 import com.hkoikoi.toeicMaster.domain.member.dto.MemberResponse;
+import com.hkoikoi.toeicMaster.domain.member.dto.MemberRoleUpdateRequest;
 import com.hkoikoi.toeicMaster.domain.member.enums.MemberRole;
 import com.hkoikoi.toeicMaster.domain.member.enums.OAuth2Provider;
 import com.hkoikoi.toeicMaster.domain.member.service.MemberService;
@@ -96,5 +97,30 @@ class MemberControllerTest {
 			.andExpect(jsonPath("$.data").doesNotExist());
 
 		verify(memberService).updateNickname(currentMemberId, newNickname);
+	}
+
+	@Test
+	@WithMockUser // TODO: 추후 @WithMockUser(roles = "ADMIN")으로 변경 필요
+	@DisplayName(value = "[ADMIN] 사용자 권한 변경 요청이 성공하면 200 OK를 반환한다.")
+	void updateRole_should_return200_when_requestedByAdmin() throws Exception {
+
+		// given
+		Long targetMemberId = 2L;
+		MemberRole newRole = MemberRole.PRO;
+		MemberRoleUpdateRequest request = new MemberRoleUpdateRequest(newRole);
+
+		willDoNothing().given(memberService).updateRole(targetMemberId, newRole);
+
+		// when & then
+		mockMvc.perform(patch("/api/v1/members/{memberId}/role", targetMemberId)
+				.with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.result").value(Boolean.TRUE))
+			.andExpect(jsonPath("$.data").doesNotExist());
+
+		verify(memberService).updateRole(targetMemberId, newRole);
 	}
 }

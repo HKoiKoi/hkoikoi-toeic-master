@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hkoikoi.toeicMaster.domain.member.dto.MemberResponse;
 import com.hkoikoi.toeicMaster.domain.member.entity.Member;
+import com.hkoikoi.toeicMaster.domain.member.enums.MemberRole;
 import com.hkoikoi.toeicMaster.domain.member.enums.OAuth2Provider;
 import com.hkoikoi.toeicMaster.domain.member.repository.MemberRepository;
 import com.hkoikoi.toeicMaster.global.exception.BusinessException;
@@ -52,7 +53,14 @@ public class MemberService {
 
 	// TODO: [ADMIN] 사용자 닉네임 변경 로직 작성
 
-	// TODO: [ADMIN] 사용자 권한 변경 로직 작성
+	@Transactional
+	public void updateRole(Long memberId, MemberRole role) {
+
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
+
+		member.updateRole(role);
+	}
 
 	private String generateUniqueNickname(String baseNickname) {
 
