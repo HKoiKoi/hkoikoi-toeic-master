@@ -1,11 +1,5 @@
-import { Layout } from "@/components/layout/Layout";
+import { AppRouter } from "@/router/router";
 
-function App() {
-  return (
-    <Layout>
-      <div>메인 페이지 컨텐츠입니다!</div>
-    </Layout>
-  );
+export default function App() {
+  return <AppRouter />;
 }
-
-export default App;
