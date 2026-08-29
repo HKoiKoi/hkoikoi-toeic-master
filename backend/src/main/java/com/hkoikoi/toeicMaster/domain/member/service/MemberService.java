@@ -51,8 +51,6 @@ public class MemberService {
 		member.updateNickname(newNickname);
 	}
 
-	// TODO: [ADMIN] 사용자 닉네임 변경 로직 작성
-
 	@Transactional
 	public void updateRole(Long memberId, MemberRole role) {
 
@@ -64,16 +62,24 @@ public class MemberService {
 
 	private String generateUniqueNickname(String baseNickname) {
 
-		String nickname = (baseNickname != null && !baseNickname.isBlank()) ? baseNickname : "Member";
+		String sanitized = baseNickname == null ? "" : baseNickname.replaceAll("[^a-zA-Z0-9가-힣]", "");
 
-		if (nickname.length() > 6) {
-			nickname = nickname.substring(0, 6);
+		if (sanitized.length() < 2) {
+			sanitized = "Member";
+		} else if (sanitized.length() > 10) {
+			sanitized = sanitized.substring(0, 10);
 		}
 
-		String uniqueNickname = nickname;
+		if (!memberRepository.existsByNickname(sanitized)) {
+			return sanitized;
+		}
+
+		String baseForRandom = sanitized.length() > 6 ? sanitized.substring(0, 6) : sanitized;
+		String uniqueNickname = baseForRandom;
+
 		while (memberRepository.existsByNickname(uniqueNickname)) {
 			int randomNum = (int)(Math.random() * 9000) + 1000;
-			uniqueNickname = nickname + randomNum;
+			uniqueNickname = baseForRandom + randomNum;
 		}
 
 		return uniqueNickname;

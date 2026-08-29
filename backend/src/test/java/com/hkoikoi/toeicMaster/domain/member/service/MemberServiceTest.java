@@ -78,7 +78,7 @@ class MemberServiceTest {
 		assertThat(resultMember).isNotNull();
 
 		assertThat(resultMember.getEmail()).isEqualTo(email);
-		assertThat(resultMember.getNickname()).isEqualTo(nickname.substring(0, 6));
+		assertThat(resultMember.getNickname()).isEqualTo(nickname);
 		assertThat(resultMember.getProvider()).isEqualTo(provider);
 		assertThat(resultMember.getProviderId()).isEqualTo(providerId);
 		assertThat(resultMember.getRole().name()).isEqualTo("BASIC");
