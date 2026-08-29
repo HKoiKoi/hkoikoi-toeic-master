@@ -14,6 +14,9 @@ public final class SecurityConstants {
 	// OAuth2 & Auth Constants
 	public static final String ROLE_PREFIX = "ROLE_";
 
+	// Redis Key Constants
+	public static final String REDIS_KEY_REFRESH_TOKEN = "toeic-master:auth:refresh-token:";
+
 	// Query Parameters
 	public static final String QUERY_PARAM_ACCESS_TOKEN = "accessToken";
 	public static final String QUERY_PARAM_ERROR = "error";
