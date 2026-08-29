@@ -1,5 +1,6 @@
 package com.hkoikoi.toeicMaster.domain.auth.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +26,15 @@ public class AuthController {
 		@Valid @RequestBody TokenRefreshRequest request
 	) {
 		return ApiResponse.success(authService.reissueToken(request.refreshToken()));
+	}
+
+	@PostMapping("/logout")
+	public ApiResponse<Void> logout(
+		@AuthenticationPrincipal Long currentMemberId
+	) {
+
+		authService.logout(currentMemberId);
+
+		return ApiResponse.success();
 	}
 }

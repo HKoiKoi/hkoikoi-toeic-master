@@ -42,4 +42,9 @@ public class AuthService {
 
 		return TokenRefreshResponse.of(newAccessToken);
 	}
+
+	@Transactional
+	public void logout(Long memberId) {
+		refreshTokenRepository.deleteByMemberId(memberId);
+	}
 }
