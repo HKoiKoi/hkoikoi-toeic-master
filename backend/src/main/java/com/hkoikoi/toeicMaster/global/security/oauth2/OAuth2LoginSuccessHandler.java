@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.hkoikoi.toeicMaster.global.security.SecurityConstants;
 import com.hkoikoi.toeicMaster.global.security.jwt.JwtProvider;
 import com.hkoikoi.toeicMaster.global.security.jwt.RefreshTokenRepository;
+import com.hkoikoi.toeicMaster.global.util.CookieUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,6 +32,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
 	@Value("${app.oauth2.frontend-redirect-url}")
 	private String frontendRedirectUrl;
+
+	@Value("${jwt.refresh-token-validity-in-seconds}")
+	private long refreshTokenValidityInSeconds;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -52,6 +56,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 		log.info("OAuth2 로그인 성공. 발급된 Member ID: {}, Role: {}", memberId, role);
 
 		refreshTokenRepository.save(memberId, refreshToken);
+
+		CookieUtil.addCookie(
+			response,
+			SecurityConstants.REFRESH_TOKEN_COOKIE_NAME,
+			refreshToken,
+			refreshTokenValidityInSeconds
+		);
 
 		String targetUrl = UriComponentsBuilder.fromUriString(frontendRedirectUrl)
 			.queryParam(SecurityConstants.QUERY_PARAM_ACCESS_TOKEN, accessToken)
