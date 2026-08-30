@@ -1,8 +1,8 @@
-import { Layout } from "@/components/layout/Layout";
+import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
+import { Layout } from "@/components/layout/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-const Home = () => <div className="text-2xl font-bold">홈 화면</div>;
 const Login = () => <div className="text-2xl font-bold">로그인 화면</div>;
 const VocaList = () => (
   <div className="text-2xl font-bold">스마트 단어장 화면</div>
