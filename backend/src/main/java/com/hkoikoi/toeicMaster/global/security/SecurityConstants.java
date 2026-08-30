@@ -17,6 +17,9 @@ public final class SecurityConstants {
 	// Redis Key Constants
 	public static final String REDIS_KEY_REFRESH_TOKEN = "toeic-master:auth:refresh-token:";
 
+	// Cookie Constants
+	public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+
 	// Query Parameters
 	public static final String QUERY_PARAM_ACCESS_TOKEN = "accessToken";
 	public static final String QUERY_PARAM_ERROR = "error";
