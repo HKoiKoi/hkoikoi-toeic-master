@@ -1,9 +1,10 @@
-import { Layout } from "@/components/layout/Layout";
+import Login from "@/pages/Login";
+import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import OAuth2RedirectHandler from "@/pages/OAuth2LoginSuccessHandler";
 
-const Home = () => <div className="text-2xl font-bold">홈 화면</div>;
-const Login = () => <div className="text-2xl font-bold">로그인 화면</div>;
 const VocaList = () => (
   <div className="text-2xl font-bold">스마트 단어장 화면</div>
 );
@@ -32,6 +33,9 @@ export const AppRouter = () => {
 
           {/* 일치하는 주소가 없을 때 표시할 404 에러 페이지 */}
           <Route path="*" element={<NotFound />} />
+
+          {/* OAuth2 로그인 성공 후 리디렉션 핸들러 */}
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         </Routes>
       </Layout>
     </BrowserRouter>
