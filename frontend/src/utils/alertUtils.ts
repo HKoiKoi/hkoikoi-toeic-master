@@ -3,7 +3,8 @@ import Swal, { type SweetAlertOptions } from "sweetalert2";
 const baseSwal = Swal.mixin({
   customClass: {
     confirmButton: "btn btn-primary ml-2",
-    cancelButton: "btn btn-ghost border border-gray-300",
+    cancelButton:
+      "btn bg-base-200 text-base-content hover:bg-base-300 border-none ml-2",
     popup: "rounded-2xl",
   },
   buttonsStyling: false,
@@ -84,5 +85,33 @@ export const alertUtils = {
     });
 
     return result.isConfirmed;
+  },
+
+  /**
+   * 텍스트 입력을 받는 프롬프트 알림창
+   * @returns 사용자가 입력한 값 (취소 누르면 undefined 반환)
+   */
+  prompt: async (
+    title: string,
+    inputLabel: string,
+    inputValue?: string,
+    inputValidator?: (value: string) => string | undefined | void,
+    confirmButtonText = "확인",
+    cancelButtonText = "취소",
+    options?: SweetAlertOptions,
+  ): Promise<string | undefined> => {
+    const result = await baseSwal.fire({
+      title,
+      input: "text",
+      inputLabel,
+      inputValue,
+      showCancelButton: true,
+      confirmButtonText,
+      cancelButtonText,
+      inputValidator,
+      ...options,
+    } as SweetAlertOptions);
+
+    return result.value;
   },
 };

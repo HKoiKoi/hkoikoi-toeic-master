@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useAuthStore } from "@/store/authStore";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { PreviewSection } from "@/components/home/PreviewSection";
 import { DashboardSection } from "@/components/home/DashboardSection";
 
 export const Home = () => {
-  // TODO: Zustand, React Query를 통해 전역 상태로 관리할 유저 정보
-  const [isLoggedIn] = useState<boolean>(true);
-  const mockMember = {
-    nickname: "토익마스터",
-    role: "ADMIN",
-  };
+  const { isAuthenticated, member } = useAuthStore();
 
   return (
     <div className="flex flex-col gap-12 py-4">
@@ -17,10 +12,10 @@ export const Home = () => {
       <section className="hero bg-base-200 rounded-3xl p-4 md:p-8">
         <div className="hero-content text-center md:text-left flex-col md:flex-row gap-8 lg:gap-16 w-full justify-between p-0">
           <div className="max-w-3xl">
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <div className="flex items-center gap-2 justify-center md:justify-start mb-4 text-primary font-bold">
                 <Sparkles size={20} />
-                <span>환영합니다, {mockMember.nickname}님!</span>
+                <span>환영합니다, {member?.nickname}님!</span>
               </div>
             ) : (
               <div className="inline-block bg-primary/10 text-primary font-semibold px-4 py-1.5 rounded-full mb-4 text-sm">
@@ -38,7 +33,7 @@ export const Home = () => {
               <br className="block md:hidden" /> 당신의 목표 달성을 돕습니다.
             </p>
 
-            {!isLoggedIn && (
+            {!isAuthenticated && (
               <a
                 href="/login"
                 className="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-primary/50 transition-shadow"
@@ -51,7 +46,7 @@ export const Home = () => {
       </section>
 
       {/* 학습 대시보드 / 토익 영단어 맛보기 */}
-      {isLoggedIn ? <DashboardSection /> : <PreviewSection />}
+      {isAuthenticated ? <DashboardSection /> : <PreviewSection />}
     </div>
   );
 };
