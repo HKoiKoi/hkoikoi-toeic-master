@@ -1,7 +1,7 @@
-import { useAuthStore } from "@/store/authStore";
 import type { ApiResponse } from "@/types/api";
-import type { TokenRefreshResponse } from "@/types/auth";
 import { alertUtils } from "@/utils/alertUtils";
+import { useAuthStore } from "@/store/authStore";
+import type { TokenRefreshResponse } from "@/types/auth";
 import axios, { isAxiosError, type InternalAxiosRequestConfig } from "axios";
 
 export const api = axios.create({
