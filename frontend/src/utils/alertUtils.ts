@@ -50,6 +50,19 @@ export const alertUtils = {
   },
 
   /**
+   * 정보/안내 알림창
+   */
+  info: (title: string, text?: string, options?: SweetAlertOptions) => {
+    return baseSwal.fire({
+      icon: "info",
+      title,
+      text,
+      confirmButtonText: "확인",
+      ...options,
+    });
+  },
+
+  /**
    * 확인/취소 알림창
    * @returns 사용자가 '확인'을 누르면 true를 반환하는 Promise
    */
