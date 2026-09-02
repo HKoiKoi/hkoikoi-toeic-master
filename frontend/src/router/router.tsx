@@ -4,6 +4,7 @@ import { NotFound } from "@/pages/NotFound";
 import { Layout } from "@/components/layout/Layout";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import OAuth2RedirectHandler from "@/pages/OAuth2LoginSuccessHandler";
+import { AdminProtectedRoute } from "@/components/layout/AdminProtectedRoute";
 
 const VocaList = () => (
   <div className="text-2xl font-bold">스마트 단어장 화면</div>
@@ -29,7 +30,9 @@ export const AppRouter = () => {
           <Route path="/grammar" element={<GrammarList />} />
 
           {/* 관리자 라우트 */}
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+          </Route>
 
           {/* 일치하는 주소가 없을 때 표시할 404 에러 페이지 */}
           <Route path="*" element={<NotFound />} />
