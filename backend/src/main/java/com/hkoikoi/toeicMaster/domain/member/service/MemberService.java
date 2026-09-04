@@ -1,23 +1,32 @@
 package com.hkoikoi.toeicMaster.domain.member.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hkoikoi.toeicMaster.domain.member.dto.MemberPageResponse;
 import com.hkoikoi.toeicMaster.domain.member.dto.MemberResponse;
+import com.hkoikoi.toeicMaster.domain.member.dto.MemberSearchCondition;
+import com.hkoikoi.toeicMaster.domain.member.dto.MemberSearchResponse;
 import com.hkoikoi.toeicMaster.domain.member.entity.Member;
 import com.hkoikoi.toeicMaster.domain.member.enums.MemberRole;
 import com.hkoikoi.toeicMaster.domain.member.enums.OAuth2Provider;
+import com.hkoikoi.toeicMaster.domain.member.repository.MemberQueryRepository;
 import com.hkoikoi.toeicMaster.domain.member.repository.MemberRepository;
 import com.hkoikoi.toeicMaster.global.exception.BusinessException;
 import com.hkoikoi.toeicMaster.global.exception.ErrorCode;
+import com.hkoikoi.toeicMaster.global.util.PageLimitCalculator;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
 	private final MemberRepository memberRepository;
+	private final MemberQueryRepository memberQueryRepository;
 
 	@Transactional(readOnly = true)
 	public MemberResponse getMyInfo(Long memberId) {
@@ -28,7 +37,28 @@ public class MemberService {
 		return MemberResponse.from(member);
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
+	public MemberPageResponse searchMembers(MemberSearchCondition condition) {
+
+		long offset = (long)(condition.page() - 1) * condition.pageSize();
+
+		Long countLimit = PageLimitCalculator.calculatePageLimit(
+			(long)condition.page(),
+			(long)condition.pageSize(),
+			10L
+		);
+
+		List<MemberSearchResponse> members = memberQueryRepository.searchMembers(
+			condition,
+			offset,
+			condition.pageSize()
+		);
+
+		Long totalCount = memberQueryRepository.countMembers(condition, countLimit);
+
+		return MemberPageResponse.of(members, totalCount);
+	}
+
 	public Member getOrCreateMember(String email, String nickname, OAuth2Provider provider, String providerId) {
 		return memberRepository.findByProviderAndProviderId(provider, providerId)
 			.orElseGet(() -> {
@@ -38,7 +68,6 @@ public class MemberService {
 			});
 	}
 
-	@Transactional
 	public void updateNickname(Long memberId, String newNickname) {
 
 		if (memberRepository.existsByNickname(newNickname)) {
@@ -51,7 +80,6 @@ public class MemberService {
 		member.updateNickname(newNickname);
 	}
 
-	@Transactional
 	public void updateRole(Long memberId, MemberRole role) {
 
 		Member member = memberRepository.findById(memberId)
