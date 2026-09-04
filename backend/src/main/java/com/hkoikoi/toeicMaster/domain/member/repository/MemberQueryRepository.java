@@ -2,6 +2,7 @@ package com.hkoikoi.toeicMaster.domain.member.repository;
 
 import static com.hkoikoi.toeicMaster.domain.member.entity.QMember.*;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class MemberQueryRepository {
 				nicknameContains(condition.nickname()),
 				roleEq(condition.role()),
 				providerEq(condition.provider()),
+				createdAtBetween(condition.startDate(), condition.endDate()),
 				member.isDeleted.isFalse()
 			)
 			.limit(countLimit)
@@ -73,6 +75,7 @@ public class MemberQueryRepository {
 				nicknameContains(condition.nickname()),
 				roleEq(condition.role()),
 				providerEq(condition.provider()),
+				createdAtBetween(condition.startDate(), condition.endDate()),
 				member.isDeleted.isFalse()
 			)
 			.orderBy(member.id.desc())
@@ -95,5 +98,22 @@ public class MemberQueryRepository {
 
 	private BooleanExpression providerEq(OAuth2Provider provider) {
 		return provider != null ? member.provider.eq(provider) : null;
+	}
+
+	private BooleanExpression createdAtBetween(LocalDate startDate, LocalDate endDate) {
+
+		if (startDate == null && endDate == null) {
+			return null;
+		}
+
+		if (startDate != null && endDate != null) {
+			return member.createdAt.between(startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+		}
+
+		if (startDate != null) {
+			return member.createdAt.goe(startDate.atStartOfDay());
+		}
+
+		return member.createdAt.loe(endDate.atTime(23, 59, 59));
 	}
 }
