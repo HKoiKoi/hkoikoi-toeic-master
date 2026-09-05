@@ -2,10 +2,10 @@ import { api } from "@/api/apiInstance";
 import type { ApiResponse } from "@/types/api";
 import type {
   MemberResponse,
+  MemberPageResponse,
+  MemberSearchCondition,
   MemberRoleUpdateRequest,
   MemberNicknameUpdateRequest,
-  MemberSearchCondition,
-  MemberPageResponse,
 } from "@/types/member";
 
 export const memberApi = {
