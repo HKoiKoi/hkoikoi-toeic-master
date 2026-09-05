@@ -2,6 +2,7 @@ import Login from "@/pages/Login";
 import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
 import { Layout } from "@/components/layout/Layout";
+import { AdminHome } from "@/pages/admin/AdminHome";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import OAuth2RedirectHandler from "@/pages/OAuth2LoginSuccessHandler";
@@ -12,9 +13,6 @@ const VocaList = () => (
 );
 const GrammarList = () => (
   <div className="text-2xl font-bold">핵심 문법 화면</div>
-);
-const AdminHome = () => (
-  <div className="text-2xl font-bold">관리자 대시보드 메인</div>
 );
 
 export const AppRouter = () => {
