@@ -4,6 +4,8 @@ import type {
   MemberResponse,
   MemberRoleUpdateRequest,
   MemberNicknameUpdateRequest,
+  MemberSearchCondition,
+  MemberPageResponse,
 } from "@/types/member";
 
 export const memberApi = {
@@ -14,6 +16,21 @@ export const memberApi = {
   getMyInfo: async () => {
     const response =
       await api.get<ApiResponse<MemberResponse>>("/api/v1/members/me");
+
+    return response.data;
+  },
+
+  /**
+   * 회원 목록 조회 API (관리자 전용)
+   * @param condition 검색 조건 및 페이징 정보
+   */
+  searchMembers: async (condition: MemberSearchCondition) => {
+    const response = await api.get<ApiResponse<MemberPageResponse>>(
+      "/api/v1/members",
+      {
+        params: condition,
+      },
+    );
 
     return response.data;
   },
