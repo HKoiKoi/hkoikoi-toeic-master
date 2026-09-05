@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 
-export const AdminDashboard = () => {
+export const AdminLayout = () => {
   return (
     <div className="drawer lg:drawer-open">
       <input id="admin-drawer" type="checkbox" className="drawer-toggle" />

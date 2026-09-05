@@ -5,7 +5,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Route, Routes, BrowserRouter, Outlet } from "react-router-dom";
 import OAuth2RedirectHandler from "@/pages/OAuth2LoginSuccessHandler";
 import { AdminProtectedRoute } from "@/components/layout/AdminProtectedRoute";
-import { AdminDashboard } from "@/pages/admin/AdminDashboard";
+import { AdminLayout } from "@/components/layout/AdminLayout";
 
 const VocaList = () => (
   <div className="text-2xl font-bold">스마트 단어장 화면</div>
@@ -48,7 +48,7 @@ export const AppRouter = () => {
 
         {/* 관리자 라우트 */}
         <Route element={<AdminProtectedRoute />}>
-          <Route path="/admin" element={<AdminDashboard />}>
+          <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminHome />} />
             <Route
               path="members"
