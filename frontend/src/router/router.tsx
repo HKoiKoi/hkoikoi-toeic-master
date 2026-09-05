@@ -3,6 +3,7 @@ import { Home } from "@/pages/Home";
 import { NotFound } from "@/pages/NotFound";
 import { Layout } from "@/components/layout/Layout";
 import { AdminHome } from "@/pages/admin/AdminHome";
+import { AdminMembers } from "@/pages/admin/AdminMembers";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import OAuth2RedirectHandler from "@/pages/OAuth2LoginSuccessHandler";
@@ -36,10 +37,7 @@ export const AppRouter = () => {
         <Route element={<AdminProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminHome />} />
-            <Route
-              path="members"
-              element={<div>회원 관리 화면 (여기에 MemberPage 연결)</div>}
-            />
+            <Route path="/admin/members" element={<AdminMembers />} />
           </Route>
         </Route>
       </Routes>
