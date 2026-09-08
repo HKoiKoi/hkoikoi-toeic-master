@@ -1,6 +1,6 @@
 import { create } from "zustand/react";
-import type { MemberResponse } from "@/types/member";
 import { persist } from "zustand/middleware";
+import type { MemberResponse } from "@/types/member";
 
 interface AuthState {
   // 상태

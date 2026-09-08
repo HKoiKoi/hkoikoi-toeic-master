@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { alertUtils } from "@/utils/alertUtils";
+import { BaseSelect } from "@/components/common/BaseSelect";
+import { Pagination } from "@/components/common/Pagination";
 import { RoleBadge, ProviderBadge } from "@/components/common/Badges";
 import { useSearchMembers, useUpdateMemberRole } from "@/hooks/useMembers";
 import type {
@@ -7,13 +9,21 @@ import type {
   OAuth2Provider,
   MemberSearchCondition,
 } from "@/types/member";
-import { BaseSelect } from "@/components/common/BaseSelect";
-import { Pagination } from "@/components/common/Pagination";
 
 const roleOptions = [
   { value: "BASIC", label: "BASIC" },
   { value: "PRO", label: "PRO" },
   { value: "ADMIN", label: "ADMIN" },
+];
+
+const searchRoleOptions = [{ value: "", label: "전체" }, ...roleOptions];
+
+const searchProviderOptions = [
+  { value: "", label: "전체" },
+  { value: "GOOGLE", label: "GOOGLE" },
+  { value: "KAKAO", label: "KAKAO" },
+  { value: "NAVER", label: "NAVER" },
+  { value: "GITHUB", label: "GITHUB" },
 ];
 
 export const AdminMembers = () => {
@@ -124,42 +134,33 @@ export const AdminMembers = () => {
               <label className="label">
                 <span className="label-text font-medium">권한</span>
               </label>
-              <select
-                className="select select-bordered w-full"
+              <BaseSelect
+                className="w-full"
                 value={searchInput.role}
-                onChange={(e) =>
+                options={searchRoleOptions}
+                onChange={(newValue) =>
                   setSearchInput({
                     ...searchInput,
-                    role: e.target.value as MemberRole,
+                    role: newValue as MemberRole | "",
                   })
                 }
-              >
-                <option value="">전체</option>
-                <option value="BASIC">BASIC</option>
-                <option value="PRO">PRO</option>
-                <option value="ADMIN">ADMIN</option>
-              </select>
+              />
             </div>
             <div className="form-control w-full">
               <label className="label">
-                <span className="label-text font-medium">플랫폼</span>
+                <span className="label-text font-medium">가입 경로</span>
               </label>
-              <select
-                className="select select-bordered w-full"
+              <BaseSelect
+                className="w-full"
                 value={searchInput.provider}
-                onChange={(e) =>
+                options={searchProviderOptions}
+                onChange={(newValue) =>
                   setSearchInput({
                     ...searchInput,
-                    provider: e.target.value as OAuth2Provider,
+                    provider: newValue as OAuth2Provider | "",
                   })
                 }
-              >
-                <option value="">전체</option>
-                <option value="GOOGLE">GOOGLE</option>
-                <option value="KAKAO">KAKAO</option>
-                <option value="NAVER">NAVER</option>
-                <option value="GITHUB">GITHUB</option>
-              </select>
+              />
             </div>
             <div className="flex gap-2 w-full mt-4 lg:mt-0">
               <button type="submit" className="btn btn-primary flex-1">
@@ -192,7 +193,7 @@ export const AdminMembers = () => {
             <thead className="bg-base-200/50 text-base-content">
               <tr>
                 <th>ID</th>
-                <th>플랫폼</th>
+                <th>가입 경로</th>
                 <th>이메일 / 닉네임</th>
                 <th>가입일</th>
                 <th>권한</th>
@@ -241,7 +242,7 @@ export const AdminMembers = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="text-sm text-base-content/80">
+                    <td className="text-sm text-base-content/80 whitespace-nowrap min-w-25">
                       {member.createdAt.split(" ")[0]}
                     </td>
                     <td>
