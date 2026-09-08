@@ -16,6 +16,7 @@ app:
   oauth2:
     cookie-secure: false
     frontend-redirect-url: "http://localhost:3000/oauth2/redirect"
+    frontend-login-url: "http://localhost:5173/login"
 
 # ----------------------------------------
 # Logging
