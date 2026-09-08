@@ -1,5 +1,5 @@
-import { alertUtils } from "@/utils/alertUtils";
 import { LogIn } from "lucide-react";
+import { alertUtils } from "@/utils/alertUtils";
 
 const Login = () => {
   const baseUrl = import.meta.env.VITE_API_BASE_URL || "";

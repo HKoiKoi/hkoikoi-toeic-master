@@ -39,3 +39,37 @@ export interface MemberResponse {
   providerId: string;
   role: MemberRole;
 }
+
+/**
+ * 사용자 검색 조건을 나타내는 인터페이스
+ */
+export interface MemberSearchCondition {
+  email?: string;
+  nickname?: string;
+  role?: MemberRole;
+  provider?: OAuth2Provider;
+  startDate?: string;
+  endDate?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+/**
+ * 사용자 검색 결과를 나타내는 인터페이스
+ */
+export interface MemberSearchResponse {
+  memberId: number;
+  email: string;
+  nickname: string;
+  role: MemberRole;
+  provider: OAuth2Provider;
+  createdAt: string;
+}
+
+/**
+ * 사용자 페이지 응답을 나타내는 인터페이스
+ */
+export interface MemberPageResponse {
+  members: MemberSearchResponse[];
+  totalCount: number;
+}
