@@ -16,7 +16,6 @@ import com.hkoikoi.toeicMaster.domain.member.repository.MemberQueryRepository;
 import com.hkoikoi.toeicMaster.domain.member.repository.MemberRepository;
 import com.hkoikoi.toeicMaster.global.exception.BusinessException;
 import com.hkoikoi.toeicMaster.global.exception.ErrorCode;
-import com.hkoikoi.toeicMaster.global.util.PageLimitCalculator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,19 +41,13 @@ public class MemberService {
 
 		long offset = (long)(condition.page() - 1) * condition.pageSize();
 
-		Long countLimit = PageLimitCalculator.calculatePageLimit(
-			(long)condition.page(),
-			(long)condition.pageSize(),
-			10L
-		);
-
 		List<MemberSearchResponse> members = memberQueryRepository.searchMembers(
 			condition,
 			offset,
 			condition.pageSize()
 		);
 
-		Long totalCount = memberQueryRepository.countMembers(condition, countLimit);
+		Long totalCount = memberQueryRepository.countMembers(condition);
 
 		return MemberPageResponse.of(members, totalCount);
 	}

@@ -47,7 +47,7 @@ public class MemberQueryRepository {
 			.fetch();
 	}
 
-	public Long countMembers(MemberSearchCondition condition, Long countLimit) {
+	public Long countMembers(MemberSearchCondition condition) {
 
 		List<Long> ids = jpaQueryFactory
 			.select(member.id)
@@ -60,7 +60,6 @@ public class MemberQueryRepository {
 				createdAtBetween(condition.startDate(), condition.endDate()),
 				member.isDeleted.isFalse()
 			)
-			.limit(countLimit)
 			.fetch();
 
 		return (long)ids.size();

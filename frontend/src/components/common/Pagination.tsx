@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 interface PaginationProps {
   currentPage: number;
   pageSize: number;
@@ -11,19 +13,57 @@ export const Pagination = ({
   totalCount,
   onPageChange,
 }: PaginationProps) => {
-  const movablePageCount = 10;
+  // 화면 크기 감지 (768px 미만이면 모바일로 간주)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
 
-  const currentBlock = Math.floor((currentPage - 1) / movablePageCount);
-  const startPage = currentBlock * movablePageCount + 1;
-  const maxItemsInBlock = (startPage + movablePageCount - 1) * pageSize;
+  useEffect(() => {
+    // 리사이즈 이벤트 핸들러
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
-  const hasNext = totalCount > maxItemsInBlock;
-  const hasPrev = startPage > 1;
+    window.addEventListener("resize", handleResize);
 
-  let endPage = startPage + movablePageCount - 1;
-  if (!hasNext) {
-    const calculatedEndPage = Math.ceil(totalCount / pageSize);
-    endPage = calculatedEndPage === 0 ? 1 : calculatedEndPage;
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // 모바일/데스크탑에 따라 보여줄 페이지 버튼 수 결정
+  const maxButtons = isMobile ? 5 : 10;
+  const threshold = isMobile ? 3 : 5;
+  const beforeCount = isMobile ? 2 : 4;
+
+  const totalPages = Math.ceil(totalCount / pageSize) || 1;
+
+  let startPage = 1;
+  let endPage = totalPages;
+
+  let showPrevControls = false;
+  let showNextControls = false;
+
+  // 전체 페이지가 maxButtons보다 클 때만 슬라이딩 적용
+  if (totalPages > maxButtons) {
+    if (currentPage <= threshold) {
+      // 시작 구간 (모바일: 1~3, 데스크탑: 1~5)
+      startPage = 1;
+      endPage = maxButtons;
+      showPrevControls = false;
+      showNextControls = true;
+    } else {
+      // 중간 및 끝 구간
+      showPrevControls = true;
+
+      // 현재 페이지를 기준으로 윈도우 이동
+      startPage = currentPage - beforeCount;
+      endPage = startPage + (maxButtons - 1);
+
+      if (endPage >= totalPages) {
+        endPage = totalPages;
+        startPage = endPage - (maxButtons - 1);
+        showNextControls = false;
+      } else {
+        showNextControls = true;
+      }
+    }
   }
 
   const pages = Array.from(
@@ -33,38 +73,61 @@ export const Pagination = ({
 
   return (
     <div className="join">
-      {/* 이전 블록 이동 버튼 */}
-      <button
-        className="join-item btn btn-sm"
-        disabled={!hasPrev}
-        // 이전 블록의 마지막 페이지로 이동
-        onClick={() => onPageChange(startPage - 1)}
-      >
-        «
-      </button>
+      {/* <, << 컨트롤 그룹 */}
+      {showPrevControls && (
+        <>
+          <button
+            className="btn join-item btn-sm px-2 sm:px-3"
+            onClick={() => onPageChange(1)}
+          >
+            &laquo;
+          </button>
+          <button
+            className="join-item btn btn-sm px-2 sm:px-3"
+            onClick={() => onPageChange(Math.max(1, currentPage - maxButtons))}
+          >
+            &lsaquo;
+          </button>
+        </>
+      )}
 
-      {/* 페이지 번호 */}
-      {pages.map((page) => (
-        <button
-          key={page}
-          className={`join-item btn btn-sm ${
-            currentPage === page ? "btn-active pointer-events-none" : ""
-          }`}
-          onClick={() => onPageChange(page)}
-        >
-          {page}
-        </button>
-      ))}
+      {/* 페이지 버튼 */}
+      {pages.map((page) => {
+        const isActive = currentPage === page;
+        return (
+          <button
+            key={page}
+            className={`join-item btn btn-sm w-8 sm:w-10 ${
+              isActive
+                ? "btn-primary pointer-events-none"
+                : "btn-ghost border-base-200 hover:bg-base-200"
+            }`}
+            onClick={() => onPageChange(page)}
+          >
+            {page}
+          </button>
+        );
+      })}
 
-      {/* 다음 블록 이동 버튼 */}
-      <button
-        className="join-item btn btn-sm"
-        disabled={!hasNext}
-        // 다음 블록의 첫 페이지로 이동
-        onClick={() => onPageChange(endPage + 1)}
-      >
-        »
-      </button>
+      {/* >, >> 컨트롤 그룹 */}
+      {showNextControls && (
+        <>
+          <button
+            className="join-item btn btn-sm px-2 sm:px-3"
+            onClick={() =>
+              onPageChange(Math.min(totalPages, currentPage + maxButtons))
+            }
+          >
+            &rsaquo;
+          </button>
+          <button
+            className="join-item btn btn-sm px-2 sm:px-3"
+            onClick={() => onPageChange(totalPages)}
+          >
+            &raquo;
+          </button>
+        </>
+      )}
     </div>
   );
 };
