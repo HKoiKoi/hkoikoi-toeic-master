@@ -7,6 +7,14 @@ import type {
   OAuth2Provider,
   MemberSearchCondition,
 } from "@/types/member";
+import { BaseSelect } from "@/components/common/BaseSelect";
+import { Pagination } from "@/components/common/Pagination";
+
+const roleOptions = [
+  { value: "BASIC", label: "BASIC" },
+  { value: "PRO", label: "PRO" },
+  { value: "ADMIN", label: "ADMIN" },
+];
 
 export const AdminMembers = () => {
   // 검색 및 페이징 상태 관리
@@ -240,21 +248,18 @@ export const AdminMembers = () => {
                       <RoleBadge role={member.role} />
                     </td>
                     <td className="text-center">
-                      <select
-                        className="select select-bordered select-sm w-full max-w-30"
+                      <BaseSelect
+                        className="select-sm w-full min-w-20 max-w-32.5 text-xs sm:text-sm"
                         value={member.role}
-                        onChange={(e) =>
+                        options={roleOptions}
+                        disabled={updateRoleMutation.isPending}
+                        onChange={(newRole) =>
                           handleRoleChange(
                             member.memberId,
-                            e.target.value as MemberRole,
+                            newRole as MemberRole,
                           )
                         }
-                        disabled={updateRoleMutation.isPending}
-                      >
-                        <option value="BASIC">BASIC</option>
-                        <option value="PRO">PRO</option>
-                        <option value="ADMIN">ADMIN</option>
-                      </select>
+                      />
                     </td>
                   </tr>
                 ))
@@ -266,30 +271,12 @@ export const AdminMembers = () => {
         {/* 페이지네이션 영역 */}
         {data?.data && data.data.totalCount > 0 && (
           <div className="flex justify-center p-4 border-t border-base-200 bg-base-100">
-            <div className="join">
-              <button
-                className="join-item btn btn-sm"
-                disabled={condition.page === 1}
-                onClick={() => handlePageChange((condition.page || 1) - 1)}
-              >
-                «
-              </button>
-
-              <button className="join-item btn btn-sm pointer-events-none">
-                Page {condition.page}
-              </button>
-
-              <button
-                className="join-item btn btn-sm"
-                disabled={
-                  (condition.page || 1) * (condition.pageSize || 10) >=
-                  data.data.totalCount
-                }
-                onClick={() => handlePageChange((condition.page || 1) + 1)}
-              >
-                »
-              </button>
-            </div>
+            <Pagination
+              currentPage={condition.page || 1}
+              pageSize={condition.pageSize || 10}
+              totalCount={data.data.totalCount}
+              onPageChange={handlePageChange}
+            />
           </div>
         )}
       </div>
