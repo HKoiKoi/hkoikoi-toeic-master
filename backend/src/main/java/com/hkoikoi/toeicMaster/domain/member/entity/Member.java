@@ -39,7 +39,7 @@ import lombok.experimental.FieldDefaults;
 			columnNames = {"nickname"}
 		),
 		@UniqueConstraint(
-			name = "uk_member_provider_provider_id",
+			name = "uk_member_성provider_provider_id",
 			columnNames = {"provider", "provider_id"}
 		)
 	}
