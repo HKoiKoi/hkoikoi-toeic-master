@@ -39,7 +39,7 @@ import lombok.experimental.FieldDefaults;
 			columnNames = {"nickname"}
 		),
 		@UniqueConstraint(
-			name = "uk_member_provider_provider_id",
+			name = "uk_member_성provider_provider_id",
 			columnNames = {"provider", "provider_id"}
 		)
 	}
@@ -70,7 +70,7 @@ public class Member {
 	MemberRole role;
 
 	@Column(name = "is_deleted", nullable = false)
-	Boolean isDeleted;
+	boolean isDeleted;
 
 	@CreationTimestamp
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -103,6 +103,6 @@ public class Member {
 	}
 
 	public void delete() {
-		this.isDeleted = Boolean.TRUE;
+		this.isDeleted = true;
 	}
 }
