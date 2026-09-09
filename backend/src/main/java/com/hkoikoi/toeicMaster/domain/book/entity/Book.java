@@ -75,6 +75,13 @@ public class Book {
 		return book;
 	}
 
+	public void update(String title, String publisher, BookType bookType, boolean isActive) {
+		this.title = title;
+		this.publisher = publisher;
+		this.bookType = bookType;
+		this.isActive = isActive;
+	}
+
 	public void delete() {
 		this.isDeleted = true;
 	}
