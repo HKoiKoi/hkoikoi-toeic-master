@@ -55,4 +55,12 @@ public class BookService {
 
 		book.update(request.title(), request.publisher(), request.bookType(), request.isActive());
 	}
+
+	public void deleteBook(Long bookId) {
+
+		Book book = bookRepository.findById(bookId)
+			.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOOK));
+
+		book.delete();
+	}
 }
