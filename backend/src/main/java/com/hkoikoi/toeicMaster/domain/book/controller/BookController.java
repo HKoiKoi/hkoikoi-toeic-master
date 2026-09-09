@@ -1,5 +1,6 @@
 package com.hkoikoi.toeicMaster.domain.book.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,12 +37,14 @@ public class BookController {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ApiResponse<BookCreateResponse> createBook(@Valid @RequestBody BookCreateRequest request) {
 
 		return ApiResponse.success(bookService.createBook(request));
 	}
 
 	@PatchMapping("/{bookId}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ApiResponse<Void> updateBook(
 		@PathVariable Long bookId,
 		@Valid @RequestBody BookUpdateRequest request
@@ -53,6 +56,7 @@ public class BookController {
 	}
 
 	@DeleteMapping("/{bookId}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ApiResponse<Void> deleteBook(@PathVariable Long bookId) {
 
 		bookService.deleteBook(bookId);
