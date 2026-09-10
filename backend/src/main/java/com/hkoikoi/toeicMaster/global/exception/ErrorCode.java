@@ -37,11 +37,11 @@ public enum ErrorCode {
 	NOT_FOUND_BOOK(HttpStatus.NOT_FOUND, "BOOK_001", "존재하지 않는 교재입니다."),
 
 	// ----------------------------------------
-	// 카테고리 (Category) 에러
+	// 목차 (Category) 에러
 	// ----------------------------------------
-	NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "CATEGORY_001", "존재하지 않는 카테고리입니다."),
-	MISMATCH_CATEGORY_BOOK(HttpStatus.BAD_REQUEST, "CATEGORY_002", "해당 교재에 속한 카테고리가 아닙니다."),
-	INVALID_CATEGORY_PARENT(HttpStatus.BAD_REQUEST, "CATEGORY_003", "자기 자신을 상위 카테고리로 지정할 수 없습니다."),
+	NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "CATEGORY_001", "존재하지 않는 목차입니다."),
+	MISMATCH_CATEGORY_BOOK(HttpStatus.BAD_REQUEST, "CATEGORY_002", "해당 교재에 속한 목차가 아닙니다."),
+	INVALID_CATEGORY_PARENT(HttpStatus.BAD_REQUEST, "CATEGORY_003", "자기 자신을 상위 목차로 지정할 수 없습니다."),
 	;
 
 	HttpStatus status;
