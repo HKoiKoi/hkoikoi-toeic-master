@@ -39,4 +39,16 @@ public class CategoryController {
 	) {
 		return ApiResponse.success(categoryService.createCategory(bookId, request));
 	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/{bookId}/categories/{categoryId}")
+	public ApiResponse<Void> deleteCategory(
+		@PathVariable Long bookId,
+		@PathVariable Long categoryId
+	) {
+
+		categoryService.deleteCategory(bookId, categoryId);
+
+		return ApiResponse.success();
+	}
 }
