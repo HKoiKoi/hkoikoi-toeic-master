@@ -8,9 +8,15 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hkoikoi.toeicMaster.domain.book.entity.Book;
+import com.hkoikoi.toeicMaster.domain.book.repository.BookRepository;
+import com.hkoikoi.toeicMaster.domain.category.dto.CategoryCreateRequest;
+import com.hkoikoi.toeicMaster.domain.category.dto.CategoryCreateResponse;
 import com.hkoikoi.toeicMaster.domain.category.dto.CategoryTreeResponse;
 import com.hkoikoi.toeicMaster.domain.category.entity.Category;
 import com.hkoikoi.toeicMaster.domain.category.repository.CategoryRepository;
+import com.hkoikoi.toeicMaster.global.exception.BusinessException;
+import com.hkoikoi.toeicMaster.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class CategoryService {
 
+	private final BookRepository bookRepository;
 	private final CategoryRepository categoryRepository;
 
 	public List<CategoryTreeResponse> getCategoryTree(Long bookId) {
@@ -46,5 +53,34 @@ public class CategoryService {
 		}
 
 		return rootNodes;
+	}
+
+	@Transactional
+	public CategoryCreateResponse createCategory(Long bookId, CategoryCreateRequest request) {
+
+		Book book = bookRepository.findById(bookId)
+			.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOOK));
+
+		Category parent = null;
+		int depth = 1;
+
+		if (request.parentId() != null) {
+			parent = categoryRepository.findById(request.parentId())
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_CATEGORY));
+
+			depth = parent.getDepth() + 1;
+		}
+
+		Category category = Category.create(
+			book,
+			parent,
+			request.name(),
+			depth,
+			request.displayOrder()
+		);
+
+		Category savedCategory = categoryRepository.save(category);
+
+		return CategoryCreateResponse.from(savedCategory);
 	}
 }

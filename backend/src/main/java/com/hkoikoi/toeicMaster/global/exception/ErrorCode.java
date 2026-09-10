@@ -35,6 +35,11 @@ public enum ErrorCode {
 	// 교재 (Book) 에러
 	// ----------------------------------------
 	NOT_FOUND_BOOK(HttpStatus.NOT_FOUND, "BOOK_001", "존재하지 않는 교재입니다."),
+
+	// ----------------------------------------
+	// 카테고리 (Category) 에러
+	// ----------------------------------------
+	NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "CATEGORY_001", "존재하지 않는 카테고리입니다."),
 	;
 
 	HttpStatus status;
