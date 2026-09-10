@@ -1,8 +1,6 @@
 package com.hkoikoi.toeicMaster.domain.category.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,7 +20,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -51,9 +48,6 @@ public class Category {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	Category parent;
-
-	@OneToMany(mappedBy = "parent")
-	List<Category> children = new ArrayList<>();
 
 	@Column(nullable = false, length = 100)
 	String name;
