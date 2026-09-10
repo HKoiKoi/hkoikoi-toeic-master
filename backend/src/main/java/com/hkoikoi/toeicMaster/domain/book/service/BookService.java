@@ -14,6 +14,7 @@ import com.hkoikoi.toeicMaster.domain.book.dto.BookUpdateRequest;
 import com.hkoikoi.toeicMaster.domain.book.entity.Book;
 import com.hkoikoi.toeicMaster.domain.book.repository.BookQueryRepository;
 import com.hkoikoi.toeicMaster.domain.book.repository.BookRepository;
+import com.hkoikoi.toeicMaster.domain.category.repository.CategoryQueryRepository;
 import com.hkoikoi.toeicMaster.global.exception.BusinessException;
 import com.hkoikoi.toeicMaster.global.exception.ErrorCode;
 
@@ -26,6 +27,7 @@ public class BookService {
 
 	private final BookRepository bookRepository;
 	private final BookQueryRepository bookQueryRepository;
+	private final CategoryQueryRepository categoryQueryRepository;
 
 	@Transactional(readOnly = true)
 	public BookPageResponse searchBooks(BookSearchCondition condition) {
@@ -62,5 +64,7 @@ public class BookService {
 			.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOOK));
 
 		book.delete();
+
+		categoryQueryRepository.deleteAllByBookId(bookId);
 	}
 }
