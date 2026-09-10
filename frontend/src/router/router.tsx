@@ -5,8 +5,8 @@ import { Layout } from "@/components/layout/Layout";
 import { AdminHome } from "@/pages/admin/AdminHome";
 import { AdminMembers } from "@/pages/admin/AdminMembers";
 import { AdminLayout } from "@/components/layout/AdminLayout";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
 import OAuth2RedirectHandler from "@/pages/OAuth2LoginSuccessHandler";
+import { Route, Routes, BrowserRouter, useParams } from "react-router-dom";
 import { AdminProtectedRoute } from "@/components/layout/AdminProtectedRoute";
 
 const VocaList = () => (
@@ -15,6 +15,23 @@ const VocaList = () => (
 const GrammarList = () => (
   <div className="text-2xl font-bold">핵심 문법 화면</div>
 );
+const AdminBooks = () => (
+  <div className="p-8">
+    <h1 className="text-3xl font-bold">교재/목차 관리</h1>
+  </div>
+);
+const AdminCategories = () => {
+  const { bookId } = useParams();
+
+  return (
+    <div className="p-8">
+      <h1 className="text-3xl font-bold">목차 관리 (교재 ID: {bookId})</h1>
+      <p className="mt-4">
+        여기에 트리 컴포넌트와 DnD 기능이 들어갈 예정입니다.
+      </p>
+    </div>
+  );
+};
 
 export const AppRouter = () => {
   return (
@@ -38,6 +55,11 @@ export const AppRouter = () => {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminHome />} />
             <Route path="/admin/members" element={<AdminMembers />} />
+            <Route path="/admin/books" element={<AdminBooks />} />
+            <Route
+              path="/admin/books/:bookId/categories"
+              element={<AdminCategories />}
+            />
           </Route>
         </Route>
       </Routes>

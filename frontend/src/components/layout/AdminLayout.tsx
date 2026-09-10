@@ -65,7 +65,7 @@ export const AdminLayout = () => {
               <Link to="/admin/members">회원 관리</Link>
             </li>
             <li>
-              <Link to="/admin/settings">시스템 설정</Link>
+              <Link to="/admin/books">교재/목차 관리</Link>
             </li>
           </ul>
 
